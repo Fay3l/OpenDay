@@ -1,46 +1,63 @@
-name: Rust
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: [self-hosted]
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Rust
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source $HOME/.cargo/env
+
+    - name: Install Node.js
+      run: |
+        curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+        sudo apt-get install -y nodejs
+
+    - name: Set up Rust
+      run: |
+        source $HOME/.cargo/env
+        rustup update stable
+
     - name: Build
       run: |
-        cd rust
-        cargo build --verbose
+        source $HOME/.cargo/env
+        cargo build --release
+
     - name: Run tests
       run: |
-        cd rust
-        cargo build --verbose
+        source $HOME/.cargo/env
+        cargo test --release
+
   release:
     runs-on: [self-hosted]
-    if: github.ref == 'refs/heads/main'
+    needs: build
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'  # Utilisez une version de Node.js 15.x ou supérieure
+    - name: Install Node.js
+      run: |
+        curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+        sudo apt-get install -y nodejs
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Run semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+    - name: Run Semantic-release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npx semantic-release

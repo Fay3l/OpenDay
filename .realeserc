@@ -14,13 +14,6 @@
         { "breaking": true, "release": "major" }
       ]
     }],
-    [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "set-version ${nextRelease.version}",
-        "publishCmd": "publish-package"
-      }
-    ],
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
     "@semantic-release/github",

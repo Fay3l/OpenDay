@@ -1,8 +1,21 @@
 {
-  "branches": ["main"],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/github"
-  ]
+  "name": "your-project-name",
+  "version": "0.0.0-development",
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "semantic-release": "^17.0.0"
+  },
+  "release": {
+    "branches": ["main"],
+    "repositoryUrl": "https://github.com/Fay3l/OpenDay.git",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  }
 }

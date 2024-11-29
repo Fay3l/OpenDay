@@ -15,10 +15,10 @@
       ]
     }],
     [
-      "@semantic-release/npm",
+      "@semantic-release/exec",
       {
-        "npmPublish": false,
-        "tarballDir": "dist"
+        "prepareCmd": "set-version ${nextRelease.version}",
+        "publishCmd": "publish-package"
       }
     ],
     "@semantic-release/release-notes-generator",

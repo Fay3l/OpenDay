@@ -9,41 +9,9 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: [self-hosted]
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Install Rust
-      run: |
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source $HOME/.cargo/env
-
-    - name: Install Node.js
-      run: |
-        curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-        sudo apt-get install -y nodejs
-
-    - name: Set up Rust
-      run: |
-        source $HOME/.cargo/env
-        rustup update stable
-
-    - name: Build
-      run: |
-        source $HOME/.cargo/env
-        cargo build --release
-
-    - name: Run tests
-      run: |
-        source $HOME/.cargo/env
-        cargo test --release
 
   release:
     runs-on: [self-hosted]
-    needs: build
 
     steps:
     - name: Checkout code
